@@ -16,7 +16,7 @@
 var conf = {};
 // Settings ==================================
 
-conf.close = true;     // make a closed path. true/false
+conf.close = false;     // make a closed path. true/false
 
 conf.merge_threshold = 0.5;  // merge the ends to connect within this distance
 // set -1 to be ignored (unit:mm)
