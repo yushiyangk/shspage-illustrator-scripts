@@ -17,7 +17,6 @@ var conf = {};
 // Settings ==================================
 
 conf.close = true;     // make a closed path. true/false
-// (make closed paths when conf.ignore_if_further_than > 0)
 
 conf.marge_if_nearer_than = 0.5;  // merge the ends to connect within this distance
 // set 0 to be ignored (unit:mm)
@@ -102,10 +101,6 @@ function main() {
 		for (var i = 0, iend = pitems.length; i < iend; i++) {
 			p = pitems[i].pathPoints;
 			z = p.length - 1;
-			if (conf.ignore_if_further_than > 0
-				&& dist2(p[0].anchor, p[z].anchor) > conf.ignore_if_further_than_squared) {
-				continue;
-			}
 			adjustHandleLen(p[z], p[0]);
 			pitems[i].closed = true;
 		}
