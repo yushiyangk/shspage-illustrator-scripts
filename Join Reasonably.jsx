@@ -35,11 +35,7 @@ var hpi = mpi / 2; // half PI
 
 conf.dontAddRevHan *= mpi / 180;
 function mm2pt(mm) { return mm * 2.83464567; }
-if (conf.merge_threshold >= 0) {
-	conf.merge_threshold = mm2pt(conf.merge_threshold);
-}
 if (conf.join_threshold >= 0) {
-	conf.join_threshold = mm2pt(conf.join_threshold);
 	conf.join_threshold_squared = conf.join_threshold * conf.join_threshold
 } else {
 	conf.join_threshold_squared = -1;
@@ -47,6 +43,10 @@ if (conf.join_threshold >= 0) {
 
 main();
 function main() {
+	if (showDialog() === false) {
+		return;
+	}
+
 	var s = [];
 	getPathItemsInSelection(1, s);
 	if (s.length < 2) {
@@ -123,6 +123,81 @@ function main() {
 	for (var i = 0, iend = pitems.length; i < iend; i++) {
 		readjustAnchors(pitems[i]);
 	}
+}
+// ------------------------------------------------
+function showDialog() {
+	var dialog = new Window("dialog", "Join Reasonably");
+
+	var joinGroup = dialog.add("group", undefined, "");
+	joinGroup.orientation = "column";
+	joinGroup.alignChildren = ["left", "bottom"];
+	joinGroup.spacing = dialog.spacing / 2;
+
+	var joinThresholdRow = joinGroup.add("group", undefined, "");
+	var joinThresholdText = joinThresholdRow.add("statictext", undefined, "Join threshold:");
+	var joinThresholdField = joinThresholdRow.add("edittext", undefined, "");
+	joinThresholdField.helpTip = "Only join the ends of separate paths if they are within this distance of each other";
+	joinThresholdField.characters = 8;
+
+	var joinAllRow = joinGroup.add("group", undefined, "");
+	var joinAllSpacer = joinAllRow.add("statictext", undefined, "");
+	joinAllSpacer.preferredSize.width = joinThresholdText.preferredSize.width;
+	var joinAllCheckbox = joinAllRow.add("checkbox", undefined, "Join all paths");
+	joinAllCheckbox.helpTip = "Join all paths regardless of how far they are apart";
+
+	var closePathRow = joinGroup.add("group", undefined, "");
+	var closePathSpacer = closePathRow.add("statictext", undefined, "");
+	closePathSpacer.preferredSize.width = joinThresholdText.preferredSize.width;
+	var closePathCheckbox = closePathRow.add("checkbox", undefined, "Close paths");
+	closePathCheckbox.helpTip = "Create closed paths after joining (all paths will be closed regardless of whether they were joined to another)";
+
+	var mergeRow = dialog.add("group");
+	var mergeTooltip = "Merge the ends to connect within this distance";
+	mergeRow.alignChildren = ["left", "bottom"];
+	var mergeCheckbox = mergeRow.add("checkbox", undefined, "Merge anchors:");
+	mergeCheckbox.helpTip = mergeTooltip;
+	var mergeField = mergeRow.add("edittext", undefined, "");
+	mergeField.helpTip = mergeTooltip;
+	mergeField.characters = 8;
+
+	var buttonRow = dialog.add("group");
+	var okButton = buttonRow.add("button", undefined, "OK");
+	var cancelButton = buttonRow.add("button", undefined, "Cancel");
+
+	joinAllCheckbox.value = (conf.join_threshold === -1);
+	joinThresholdField.enabled = !joinAllCheckbox.value;
+	joinThresholdField.text = !joinAllCheckbox.value ? conf.join_threshold : "0";
+	joinAllCheckbox.onClick = function () {
+		joinThresholdField.enabled = !joinAllCheckbox.value;
+	}
+	closePathCheckbox.value = conf.close;
+
+	mergeCheckbox.value = (conf.merge_threshold > 0);
+	mergeField.enabled = mergeCheckbox.value;
+	mergeField.text = mergeCheckbox.value ? conf.merge_threshold : "0";
+	mergeCheckbox.onClick = function () {
+		mergeField.enabled = mergeCheckbox.value;
+	}
+
+	if (dialog.show() != 1) {
+		return false;
+	}
+
+	conf.close = closePathCheckbox.value;
+	conf.join_threshold = !joinAllCheckbox.value ? parseFloat(joinThresholdField.text) : -1;
+	conf.merge_threshold = mergeCheckbox.value ? parseFloat(mergeField.text) : -1;
+
+	if (conf.merge_threshold >= 0) {
+		conf.merge_threshold = mm2pt(conf.merge_threshold);
+	}
+	if (conf.join_threshold >= 0) {
+		conf.join_threshold = mm2pt(conf.join_threshold);
+		conf.join_threshold_squared = conf.join_threshold * conf.join_threshold
+	} else {
+		conf.join_threshold_squared = -1;
+	}
+
+	return true;
 }
 // ------------------------------------------------
 function cmpLen(pinfo, p, p2, i, idx1, idx2) {
