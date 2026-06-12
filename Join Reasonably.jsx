@@ -1,6 +1,7 @@
 // Join Reasonably
+// version 0.2.0
 
-// joins the open paths in the selection together with reasonable order
+// Joins the open paths in the selection together with reasonable order
 
 
 // test env: Adobe Illustrator CC 2025
