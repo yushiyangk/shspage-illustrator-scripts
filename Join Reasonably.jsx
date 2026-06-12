@@ -41,6 +41,9 @@ if (conf.join_threshold >= 0) {
 	conf.join_threshold_squared = -1;
 }
 
+MERGE_THRESHOLD_PLACEHOLDER = 0.5;
+JOIN_THRESHOLD_PLACEHOLDER = 0.5;
+
 main();
 function main() {
 	if (showDialog() === false) {
@@ -166,7 +169,7 @@ function showDialog() {
 
 	joinAllCheckbox.value = (conf.join_threshold === -1);
 	joinThresholdField.enabled = !joinAllCheckbox.value;
-	joinThresholdField.text = !joinAllCheckbox.value ? conf.join_threshold : "0";
+	joinThresholdField.text = !joinAllCheckbox.value ? conf.join_threshold : JOIN_THRESHOLD_PLACEHOLDER;
 	joinAllCheckbox.onClick = function () {
 		joinThresholdField.enabled = !joinAllCheckbox.value;
 	}
@@ -174,7 +177,7 @@ function showDialog() {
 
 	mergeCheckbox.value = (conf.merge_threshold > 0);
 	mergeField.enabled = mergeCheckbox.value;
-	mergeField.text = mergeCheckbox.value ? conf.merge_threshold : "0";
+	mergeField.text = mergeCheckbox.value ? conf.merge_threshold : MERGE_THRESHOLD_PLACEHOLDER;
 	mergeCheckbox.onClick = function () {
 		mergeField.enabled = mergeCheckbox.value;
 	}
