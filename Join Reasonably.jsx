@@ -18,8 +18,8 @@ var conf = {};
 
 conf.close = true;     // make a closed path. true/false
 
-conf.marge_if_nearer_than = 0.5;  // merge the ends to connect within this distance
-// set 0 to be ignored (unit:mm)
+conf.merge_threshold = 0.5;  // merge the ends to connect within this distance
+// set -1 to be ignored (unit:mm)
 
 conf.ignore_if_further_than = 0;  // ignore to connect if distance between the ends exceeds this value
 // set 0 to be ignored (unit:mm)
@@ -35,7 +35,9 @@ var hpi = mpi / 2; // half PI
 
 conf.dontAddRevHan *= mpi / 180;
 function mm2pt(mm) { return mm * 2.83464567; }
-conf.marge_if_nearer_than = mm2pt(conf.marge_if_nearer_than);
+if (conf.merge_threshold >= 0) {
+	conf.merge_threshold = mm2pt(conf.merge_threshold);
+}
 conf.ignore_if_further_than = mm2pt(conf.ignore_if_further_than);
 conf.ignore_if_further_than_squared = conf.ignore_if_further_than * conf.ignore_if_further_than
 
@@ -49,7 +51,7 @@ function main() {
 	}
 
 	for (var i = 0, iend = s.length; i < iend; i++) {
-		readjustAnchors(s[i], conf.marge_if_nearer_than);
+		readjustAnchors(s[i], conf.merge_threshold);
 	}
 
 	var pitem = s.shift(); // pick up the first path.
@@ -139,7 +141,7 @@ function adjustHandleLen(p1, p2) {
 		p2.leftDirection = p1.leftDirection;
 		p1.remove();
 
-	} else if (d < conf.marge_if_nearer_than) {
+	} else if (d <= conf.merge_threshold) {
 		var pnt = [(p1.anchor[0] + p2.anchor[0]) / 2,
 		(p1.anchor[1] + p2.anchor[1]) / 2];
 		p2.rightDirection = [p2.rightDirection[0] + (pnt[0] - p2.anchor[0]),
@@ -298,28 +300,28 @@ function extractPaths(s, pp_length_limit, paths) {
 	}
 }
 // --------------------------------------
-function readjustAnchors(pitem, marge_if_nearer_than) {
+function readjustAnchors(pitem, merge_threshold) {
 	var pp = pitem.pathPoints;
-	if (marge_if_nearer_than == 0) return;
+	if (merge_threshold < 0) return;
 	if (pp.length < 2) return;
 
 	// Settings ==========================
 
-	var minDist = marge_if_nearer_than;
+	var minDist = merge_threshold;
 	minDist *= minDist;
 
 	// ===================================
 
 	if (pitem.closed) {
 		for (var i = pp.length - 1; i >= 1; i--) {
-			if (dist2(pp[0].anchor, pp[i].anchor) < minDist) {
+			if (dist2(pp[0].anchor, pp[i].anchor) <= minDist) {
 				pp[0].leftDirection = pp[i].leftDirection;
 				pp[i].remove();
 			} else { break; }
 		}
 	}
 	for (var i = pp.length - 1; i >= 1; i--) {
-		if (dist2(pp[i].anchor, pp[i - 1].anchor) < minDist) {
+		if (dist2(pp[i].anchor, pp[i - 1].anchor) <= minDist) {
 			pp[i - 1].rightDirection = pp[i].rightDirection;
 			pp[i].remove();
 		}
