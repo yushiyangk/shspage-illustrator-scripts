@@ -140,7 +140,7 @@ function showDialog() {
 	joinGroup.spacing = dialog.spacing / 2;
 
 	var joinThresholdRow = joinGroup.add("group", undefined, "");
-	var joinThresholdText = joinThresholdRow.add("statictext", undefined, "Join threshold:");
+	var joinThresholdText = joinThresholdRow.add("statictext", undefined, "Join threshold (mm):");
 	var joinThresholdField = joinThresholdRow.add("edittext", undefined, "");
 	joinThresholdField.helpTip = "Only join the ends of separate paths if they are within this distance of each other";
 	joinThresholdField.characters = 8;
@@ -160,7 +160,7 @@ function showDialog() {
 	var mergeRow = dialog.add("group");
 	var mergeTooltip = "Merge the ends to connect within this distance";
 	mergeRow.alignChildren = ["left", "bottom"];
-	var mergeCheckbox = mergeRow.add("checkbox", undefined, "Merge anchors:");
+	var mergeCheckbox = mergeRow.add("checkbox", undefined, "Merge anchors (mm):");
 	mergeCheckbox.helpTip = mergeTooltip;
 	var mergeField = mergeRow.add("edittext", undefined, "");
 	mergeField.helpTip = mergeTooltip;
