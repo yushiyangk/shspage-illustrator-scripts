@@ -1,5 +1,5 @@
 // Join Reasonably
-// version 0.2.0
+// version 0.2.1
 
 // Joins the open paths in the selection together with reasonable order
 
