@@ -21,8 +21,8 @@ conf.close = true;     // make a closed path. true/false
 conf.merge_threshold = 0.5;  // merge the ends to connect within this distance
 // set -1 to be ignored (unit:mm)
 
-conf.ignore_if_further_than = 0;  // ignore to connect if distance between the ends exceeds this value
-// set 0 to be ignored (unit:mm)
+conf.join_threshold = 0.5;  // connect only if distance between the ends is within this value
+// set -1 to be ignored (unit:mm)
 
 conf.hanLen = 0.33; // ratio of handle length to connected line. set 0 to be ignored
 
@@ -38,8 +38,12 @@ function mm2pt(mm) { return mm * 2.83464567; }
 if (conf.merge_threshold >= 0) {
 	conf.merge_threshold = mm2pt(conf.merge_threshold);
 }
-conf.ignore_if_further_than = mm2pt(conf.ignore_if_further_than);
-conf.ignore_if_further_than_squared = conf.ignore_if_further_than * conf.ignore_if_further_than
+if (conf.join_threshold >= 0) {
+	conf.join_threshold = mm2pt(conf.join_threshold);
+	conf.join_threshold_squared = conf.join_threshold * conf.join_threshold
+} else {
+	conf.join_threshold_squared = -1;
+}
 
 main();
 function main() {
@@ -85,17 +89,16 @@ function main() {
 
 		s.splice(pinfo.cIdx, 1);
 
-		if (conf.ignore_if_further_than > 0
-			&& pinfo.d > conf.ignore_if_further_than_squared) {
-			pitem = pinfo.child;
-			p = pitem.pathPoints;
-			z = p.length - 1;
-			pitems.push(pitem);
-		} else {
+		if (conf.join_threshold < 0 || pinfo.d <= conf.join_threshold_squared) {
 			if (pinfo.pPntIdx == 0) pireverse(pitem);
 			if (pinfo.cPntIdx > 0) pireverse(pinfo.child);
 			pijoin(pitem, pinfo.child);
 			z = p.length - 1;
+		} else {
+			pitem = pinfo.child;
+			p = pitem.pathPoints;
+			z = p.length - 1;
+			pitems.push(pitem);
 		}
 	}
 
@@ -106,11 +109,11 @@ function main() {
 			adjustHandleLen(p[z], p[0]);
 			pitems[i].closed = true;
 		}
-	} else if (conf.ignore_if_further_than != 0) {
+	} else if (conf.join_threshold >= 0) {
 		for (var i = 0, iend = pitems.length; i < iend; i++) {
 			p = pitems[i].pathPoints;
 			z = p.length - 1;
-			if (dist2(p[0].anchor, p[z].anchor) <= conf.ignore_if_further_than_squared) {
+			if (dist2(p[0].anchor, p[z].anchor) <= conf.join_threshold_squared) {
 				adjustHandleLen(p[z], p[0]);
 				pitems[i].closed = true;
 			}
