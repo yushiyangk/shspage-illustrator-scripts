@@ -3,7 +3,10 @@
 // joins the open paths in the selection together with reasonable order
 
 
-// test env: Adobe Illustrator CS3, CS6 (Windows)
+// test env: Adobe Illustrator CC 2025
+
+// Copyright (c) 2026 Yu Shiyang <yu.shiyang@gnayihs.uy>
+// for changes made upon the original script by Hiroyuki Sato
 
 // Copyright(c) 2004 Hiroyuki Sato
 // https://github.com/shspage
