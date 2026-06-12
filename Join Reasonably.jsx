@@ -104,6 +104,15 @@ function main() {
 			adjustHandleLen(p[z], p[0]);
 			pitems[i].closed = true;
 		}
+	} else if (conf.ignore_if_further_than != 0) {
+		for (var i = 0, iend = pitems.length; i < iend; i++) {
+			p = pitems[i].pathPoints;
+			z = p.length - 1;
+			if (dist2(p[0].anchor, p[z].anchor) <= conf.ignore_if_further_than_squared) {
+				adjustHandleLen(p[z], p[0]);
+				pitems[i].closed = true;
+			}
+		}
 	}
 
 	for (var i = 0, iend = pitems.length; i < iend; i++) {
