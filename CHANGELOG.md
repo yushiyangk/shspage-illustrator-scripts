@@ -1,5 +1,9 @@
 ## Changelog
 
+### 0.2.1
+
+Updated documentation
+
 ### 0.2.0
 
 Changes from original from http://shspage.com/aijs/en/
