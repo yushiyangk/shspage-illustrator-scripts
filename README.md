@@ -48,8 +48,8 @@ In the original script, unsetting the "Close paths" option forced all resulting 
 	<tr>
 		<td>
 			Join threshold: <i>disabled</i><br />
-			Join all paths: ☑<br />
-			Close paths: ☑
+			Join all paths: 🗹<br />
+			Close paths: 🗹
 		</td>
 		<td>Single closed path</td>
 		<td>Single closed path</td>
@@ -58,7 +58,7 @@ In the original script, unsetting the "Close paths" option forced all resulting 
 		<td>
 			Join threshold: <i>set</i><br />
 			Join all paths: ☐<br />
-			Close paths: ☑
+			Close paths: 🗹
 		</td>
 		<td>One or more paths, all <mark>closed</mark></td>
 		<td>One or more paths, all <mark>open</mark>;<br />"Close paths" ignored</td>
@@ -66,7 +66,7 @@ In the original script, unsetting the "Close paths" option forced all resulting 
 	<tr>
 		<td>
 			Join threshold: <i>disabled</i><br />
-			Join all paths: ☑<br />
+			Join all paths: 🗹<br />
 			Close paths: ☐
 		</td>
 		<td>Single open path</td>
@@ -98,8 +98,8 @@ See the LICENSE.txt included in the archive for details.
 
 ## Contact
 
-For the original author,
-Email form via http://shspage.com/aijs/en/
+For the original author,<br />
+Email form via http://shspage.com/aijs/en/<br />
 Twitter: [@shspage_en] (English) / [@shspage] (Japanese)
 
 [@shspage_en]:http://twitter.com/shspage_en
